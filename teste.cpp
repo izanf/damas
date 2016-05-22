@@ -16,7 +16,7 @@ void jogar (char tab[][TAM], int vez);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
 bool comer(char tab[][TAM], int nNumJog, char nLetJog,int vez);
-void capturaPeca(int decisao,int &contX,int &contO,int vez);
+void capturaPeca(int decisao,int &contX,int &contO,int vez,char tab[][TAM],int nNumJog,char nLetJog);
 
 int main ()
 {
@@ -142,61 +142,73 @@ void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,
 
     if(testeComer)
     {
-        cout<<"Desejar comer a peça do oponente?"<<'\n'<<"1-Sim"<<'\n'<<"2- Não";
+        cout<<"Desejar comer a peça do oponente?"<<'\t'<<"1-Sim"<<'\t'<<"2- Não"<<endl;
         cin>>captura;
     }
-    capturaPeca(captura,contX,contO,vez);
+    capturaPeca(captura,contX,contO,vez,tab,nNumJog,nLetJog);
 
 
 }
-    void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca a peça de casa
+void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca a peça de casa
+{
+    char temp;
+    temp=tab[jogL][(int)jogC-97];
+    tab[jogL][(int)jogC-97]=tab[destL][(int)destC-97];
+    tab[destL][(int)destC-97]=temp;
+}
+
+bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
+{
+    if (vez==0)
     {
-        char temp;
-        temp=tab[jogL][(int)jogC-97];
-        tab[jogL][(int)jogC-97]=tab[destL][(int)destC-97];
-        tab[destL][(int)destC-97]=temp;
+        if((nNumJog>=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
+            return false;
+        else
+            return true;
+    }
+    else if (vez==1)
+    {
+        if ((nNumJog<=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
+            return false;
+        else
+            return true;
     }
 
-    bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
+}
+bool comer(char tab[][TAM], int nNumJog, char nLetJog,int vez)
+{
+    if(vez==0)
     {
-        if (vez==0)
-        {
-            if((nNumJog>=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
-                return false;
-            else
-                return true;
-        }
-        else if (vez==1)
-        {
-            if ((nNumJog<=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
-                return false;
-            else
-                return true;
-        }
+        if(tab[nNumJog-1][(int)nLetJog-98]=='O' || tab[nNumJog-1][(int)nLetJog-96]=='O')
+            return true;
+        else
+            return false;
+    }
+    if(vez==1)
+    {
+        if(tab[nNumJog+1][(int)nLetJog-98]=='X' || tab[nNumJog+1][(int)nLetJog-96]=='X')
+            return true;
+        else
+            return false;
+    }
+}
+void capturaPeca(int decisao,int &contX,int &contO,int vez,char tab[][TAM], int nNumJog, char nLetJog)
+{
+    if(vez==0 && decisao==1)
+    {
+        contX++;
+        if(tab[nNumJog-1][(int)nLetJog-98]=='O')
+            tab[nNumJog-1][(int)nLetJog-98]=' ';
+        else if( tab[nNumJog-1][(int)nLetJog-96]=='O')
+            tab[nNumJog-1][(int)nLetJog-96]=' ';
+    }
+    else if(vez==1 && decisao==1)
+    {
+        contO++;
+        if(tab[nNumJog+1][(int)nLetJog-98]=='X')
+            tab[nNumJog+1][(int)nLetJog-98]=' ';
+        else if(tab[nNumJog+1][(int)nLetJog-96]=='X')
+            tab[nNumJog+1][(int)nLetJog-96]=' ';
 
     }
-    bool comer(char tab[][TAM], int nNumJog, char nLetJog,int vez)
-    {
-        if(vez==0)
-        {
-            if(tab[nNumJog-1][(int)nLetJog-98]=='O' || tab[nNumJog-1][(int)nLetJog-96]=='O')
-                return true;
-            else
-                return false;
-        }
-        if(vez==1)
-        {
-            if(tab[nNumJog+1][(int)nLetJog-98]=='X' || tab[nNumJog+1][(int)nLetJog-96]=='X')
-                return true;
-            else
-                return false;
-        }
-    }
-    void capturaPeca(int decisao,int &contX,int &contO,int vez)
-    {
-        if(vez==0 && decisao==1)
-                 contX++;
-        else if(vez==1 && decisao==1)
-                contO++;
-
-    }
+}
