@@ -1,5 +1,5 @@
 //Falta:
-//Oferecer a opção de comer a peça do oponente
+//corrigir a opção de comer a peça do oponente
 //desenvolver a parte contra computador
 //implementar um menu
 
