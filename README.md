@@ -1,1 +1,1 @@
-Projeto final para disciplina de gradução, versão simplificada do jogo "Damas"
+Projeto final para disciplina de graduação, versão simplificada do jogo "Damas"
