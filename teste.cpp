@@ -1,7 +1,9 @@
 //Falta:
-//corrigir a opção de comer a peça do oponente
+//corrigir a opção de comer a peça do oponente, só come uma peça
 //desenvolver a parte contra computador
 //implementar um menu
+//a peça deve se  mover para tras,caso haja peça disponivel para comer
+//verificar as casas intermediarias no movimento
 
 #include <iostream>
 
@@ -102,7 +104,7 @@ void mostraTab (char tab[][TAM]) //exibe o tabuleiro
 
 void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,caso possível
 {
-    int numJog,nNumJog,captura,contX,contO;
+    int numJog,nNumJog,captura,contX=0,contO=0;
     char letJog,nLetJog, jogada;
     bool resultValida,testeComer;
 
@@ -110,7 +112,7 @@ void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,
         jogada='X';
     else
         jogada='O';
-
+   
     cout << "[Vez do jogador " << jogada <<"]"<<endl;
     cout << "Selecione a peça para mover(ex: b 4): ";
     cin >> letJog >> numJog;
@@ -161,15 +163,15 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
 {
     if (vez==0)
     {
-        if((nNumJog>=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
+        if(tab[nNumJog-1][(int)nLetJog-97]==' ')
             return false;
         else
             return true;
     }
     else if (vez==1)
     {
-        if ((nNumJog<=(numJog+1)) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
-            return false;
+        if (tab[nNumJog-1][(int)nLetJog-97]==' ')
+           return false;
         else
             return true;
     }
