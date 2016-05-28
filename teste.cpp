@@ -183,7 +183,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     cin >> resultCome;
                     if (resultCome==1)
                     {
-                        tab[nNumJog][(int)nLetJog-98]=' ';
+                        tab[nNumJog-2][(int)nLetJog-98]=' ';
                     }
                     return false;
                 }
@@ -196,7 +196,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     cin >> resultCome;
                     if (resultCome==1)
                     {
-                        tab[nNumJog][(int)nLetJog-96]=' ';
+                        tab[nNumJog-2][(int)nLetJog-96]=' ';
                     }
                     return false;
                 }
