@@ -1,9 +1,7 @@
 //Falta:
-//corrigir a opção de comer a peça do oponente, só come uma peça
+//corrigir a opção de comer a peça do oponente
 //desenvolver a parte contra computador
 //implementar um menu
-//a peça deve se  mover para tras,caso haja peça disponivel para comer
-//verificar as casas intermediarias no movimento
 
 #include <iostream>
 
@@ -17,8 +15,6 @@ void mostraTab (char tab[][TAM]);
 void jogar (char tab[][TAM], int vez);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
-bool comer(char tab[][TAM], int nNumJog, char nLetJog,int vez);
-void capturaPeca(int decisao,int &contX,int &contO,int vez,char tab[][TAM],int nNumJog,char nLetJog);
 
 int main ()
 {
@@ -104,7 +100,7 @@ void mostraTab (char tab[][TAM]) //exibe o tabuleiro
 
 void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,caso possível
 {
-    int numJog,nNumJog,captura,contX=0,contO=0;
+    int numJog,nNumJog,captura,contX,contO;
     char letJog,nLetJog, jogada;
     bool resultValida,testeComer;
 
@@ -112,7 +108,7 @@ void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,
         jogada='X';
     else
         jogada='O';
-   
+
     cout << "[Vez do jogador " << jogada <<"]"<<endl;
     cout << "Selecione a peça para mover(ex: b 4): ";
     cin >> letJog >> numJog;
@@ -123,34 +119,24 @@ void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,
         cin >> letJog >> numJog;
     }
 
-    cout<<"Digite o local para mover:";
-    cin>>nLetJog>>nNumJog;
+    cout << "Digite o local para mover:";
+    cin >> nLetJog >> nNumJog;
 
     resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez);
 
     while(resultValida)
     {
         cout<<"Casa inválida! Selecione outra casa:";
-        cin>>nLetJog>>nNumJog;
+        cin >> nLetJog >> nNumJog;
+        resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez);
     }
 
     numJog--;
     nNumJog--;
 
     troca(tab,numJog,letJog,nNumJog,nLetJog);
-
-    testeComer=comer(tab,nNumJog,nLetJog,vez);
-
-
-    if(testeComer)
-    {
-        cout<<"Desejar comer a peça do oponente?"<<'\t'<<"1-Sim"<<'\t'<<"2- Não"<<endl;
-        cin>>captura;
-    }
-    capturaPeca(captura,contX,contO,vez,tab,nNumJog,nLetJog);
-
-
 }
+
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca a peça de casa
 {
     char temp;
@@ -161,56 +147,90 @@ void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca
 
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
 {
+    char pecaCome;
+    int resultCome;
     if (vez==0)
-    {
-        if(tab[nNumJog-1][(int)nLetJog-97]==' ')
-            return false;
-        else
-            return true;
-    }
-    else if (vez==1)
-    {
-        if (tab[nNumJog-1][(int)nLetJog-97]==' ')
-           return false;
-        else
-            return true;
-    }
+        pecaCome='O';
+    else
+        pecaCome='X';
 
-}
-bool comer(char tab[][TAM], int nNumJog, char nLetJog,int vez)
-{
-    if(vez==0)
+    if(nNumJog-numJog<5 && nLetJog-letJog<5 && tab[nNumJog-1][(int)nLetJog-97]==' ')
     {
-        if(tab[nNumJog-1][(int)nLetJog-98]=='O' || tab[nNumJog-1][(int)nLetJog-96]=='O')
-            return true;
-        else
-            return false;
+        if (nNumJog-numJog==1 || (int)nLetJog-(int)letJog==1 || nNumJog-numJog==-1 || (int)nLetJog-(int)letJog==-1)
+        {
+            if (vez==0)
+            {
+                if ((nNumJog-numJog==1 && (int)nLetJog-(int)letJog==1) || (nNumJog-numJog==1 || (int)nLetJog-(int)letJog==-1))
+                    return false;
+                else
+                    return true;
+            }
+            else
+            {
+                if ((nNumJog-numJog==-1 && (int)nLetJog-(int)letJog==1) || (nNumJog-numJog==-1 || (int)nLetJog-(int)letJog==1))
+                    return false;
+                else
+                    return true;
+            }
+        }
+        else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2)
+        {
+            if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2)
+            {
+                if (tab[nNumJog-2][(int)nLetJog-98]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==-2)
+            {
+                if (tab[nNumJog-2][(int)nLetJog-96]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
+            {
+                cout << "nNumJog: " << nNumJog << endl;
+                cout << "(int)nLetJog-96: " << (int)nLetJog-96 << endl;
+                if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==2)
+            {
+                if (tab[nNumJog][(int)nLetJog-98]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+            }
+        }
     }
-    if(vez==1)
-    {
-        if(tab[nNumJog+1][(int)nLetJog-98]=='X' || tab[nNumJog+1][(int)nLetJog-96]=='X')
-            return true;
-        else
-            return false;
-    }
-}
-void capturaPeca(int decisao,int &contX,int &contO,int vez,char tab[][TAM], int nNumJog, char nLetJog)
-{
-    if(vez==0 && decisao==1)
-    {
-        contX++;
-        if(tab[nNumJog-1][(int)nLetJog-98]=='O')
-            tab[nNumJog-1][(int)nLetJog-98]=' ';
-        else if( tab[nNumJog-1][(int)nLetJog-96]=='O')
-            tab[nNumJog-1][(int)nLetJog-96]=' ';
-    }
-    else if(vez==1 && decisao==1)
-    {
-        contO++;
-        if(tab[nNumJog+1][(int)nLetJog-98]=='X')
-            tab[nNumJog+1][(int)nLetJog-98]=' ';
-        else if(tab[nNumJog+1][(int)nLetJog-96]=='X')
-            tab[nNumJog+1][(int)nLetJog-96]=' ';
-
-    }
+    else
+        return true;
 }
