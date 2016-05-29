@@ -14,11 +14,11 @@ int main ()
 {
     char tab[TAM][TAM];
     int i, j, vez=0;
-    bool busca=false;
-
-    busca=fimJogo(tab);
+    bool busca=true;
 
     pDama(tab);
+
+    busca=fimJogo(tab);
 
     do
     {
@@ -29,8 +29,7 @@ int main ()
         else
             vez=0;
     }
-    while (!busca);
-
+    while(busca);
 
     return 0;
 }
@@ -51,7 +50,7 @@ void pDama (char tab[][TAM]) //preenche o tabuleiro com os caracteres necessári
                     tab[i][j]='O';
             }
             else
-                tab[i][j]='||';
+                tab[i][j]='|';
         }
     }
 }
@@ -170,100 +169,97 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                 return false;
             else
                 return true;
-	   }
-            else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2)
-            {
-                if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2)
-                {
-                    if (tab[nNumJog-2][(int)nLetJog-98]==pecaCome)
-                    {
-                        cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
-                        cin >> resultCome;
-                        if (resultCome==1)
-                        {
-                            tab[nNumJog-2][(int)nLetJog-98]=' ';
-                        }
-                        return false;
-                    }
-                }
-                else if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==-2)
-                {
-                    if (tab[nNumJog-2][(int)nLetJog-96]==pecaCome)
-                    {
-                        cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
-                        cin >> resultCome;
-                        if (resultCome==1)
-                        {
-                            tab[nNumJog-2][(int)nLetJog-96]=' ';
-                        }
-                        return false;
-                    }
-                }
-                else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
-                {
-                    if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
-                    {
-                        cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
-                        cin >> resultCome;
-                        if (resultCome==1)
-                        {
-                            tab[nNumJog][(int)nLetJog-96]=' ';
-                        }
-                        return false;
-                    }
-                }
-                else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==2)
-                {
-                    if (tab[nNumJog][(int)nLetJog-98]==pecaCome)
-                    {
-                        cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
-                        cin >> resultCome;
-                        if (resultCome==1)
-                        {
-                            tab[nNumJog][(int)nLetJog-98]=' ';
-                        }
-                        return false;
-                    }
-                }
-            }
         }
-        else
-            return true;
-    }
-
-    bool fimJogo(char tab[TAM][TAM])
-    {
-        int i,j,contX=0,contO=0,cont=0,a=0,b=7,ok1=0,ok2=0;
-
-        for(i=0; i<TAM; i++)
+        else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2)
         {
-            for(j=0; j<TAM; j++)
+            if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2)
             {
-                if(tab[i][j]=='X')
-                    contX++;
-                else if(tab[i][j]=='O')
-                    contO++;
-                else if(tab[i][j]==' ')
-                    cont++;
+                if (tab[nNumJog-2][(int)nLetJog-98]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==-2)
+            {
+                if (tab[nNumJog-2][(int)nLetJog-96]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
+            {
+                if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==2)
+            {
+                if (tab[nNumJog][(int)nLetJog-98]==pecaCome)
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
             }
         }
+    }
+    else
+        return true;
+}
+
+bool fimJogo(char tab[TAM][TAM])
+{
+    int i,j,contX=0,contO=0,cont=0,a=0,b=7,ok1=0,ok2=0;
+
+    for(i=0; i<TAM; i++)
+    {
         for(j=0; j<TAM; j++)
         {
-            if(tab[a][j]=='O')
-                ok1++;
-            else if(tab[b][j]=='X')
-                ok2++;
+            if(tab[i][j]=='X')
+                contX++;
+            else if(tab[i][j]=='O')
+                contO++;
+            else if(tab[i][j]==' ')
+                cont++;
         }
-
-        if((contX>=contO && contO==0) || (ok1<=4 && ok2<=4 && cont>24))
-	{
-            return false;
-	}
-        else if((contO>=contX && contX==0)|| (ok1<=4 && ok2<=4 && cont>24)){
-              return false;
-	}
-	else
-	{
-		return true;
-	}
     }
+    for(j=0; j<TAM; j++)
+    {
+        if(tab[a][j]=='O')
+            ok1++;
+        else if(tab[b][j]=='X')
+            ok2++;
+    }
+
+    if((contX>=contO && contO==0) || (ok1<=4 && ok2<=4 && cont>24))
+        return false;
+    else if((contO>=contX && contX==0)|| (ok1<=4 && ok2<=4 && cont>24))
+
+        return false;
+    else
+
+        return true;
+}
