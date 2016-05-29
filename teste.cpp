@@ -203,9 +203,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
             }
             else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
             {
-                cout << "nNumJog: " << nNumJog << endl;
-                cout << "(int)nLetJog-96: " << (int)nLetJog-96 << endl;
-                if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
+                 if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
                 {
                     cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
                     cin >> resultCome;
