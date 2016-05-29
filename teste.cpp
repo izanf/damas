@@ -8,7 +8,7 @@ void mostraTab (char tab[][TAM]);
 void jogar (char tab[][TAM], int vez);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
-bool fimJogo(char tab[TAM][TAM]);
+bool fimJogo(char tab[TAM][TAM],int& vez);
 
 int main ()
 {
@@ -26,12 +26,12 @@ int main ()
             vez=1;
         else
             vez=0;
-	
-	busca=fimJogo(tab);
+
+        busca=fimJogo(tab,vez);
 
     }
     while(busca);
-	 return 0;
+    return 0;
 }
 
 void pDama (char tab[][TAM]) //preenche o tabuleiro com os caracteres necessários
@@ -230,9 +230,9 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
         return true;
 }
 
-bool fimJogo(char tab[TAM][TAM])
+bool fimJogo(char tab[TAM][TAM],int& vez)
 {
-    int i,j,contX=0,contO=0,cont=0,a=0,b=7,ok1=0,ok2=0;
+    int i,j,contX=0,contO=0,cont=0,a=0,b=7,ok1=0,ok2=0,jg=0;
 
     for(i=0; i<TAM; i++)
     {
@@ -255,11 +255,31 @@ bool fimJogo(char tab[TAM][TAM])
     }
 
     if((contX>=contO && (contO==0 || contO<=4) && cont>=24) || (ok1<=4 && ok2<=4 && cont>=24))
-        return false;
+    {
+        cout<<"Fim de jogo!\nDeseja jogar novamente?[1-SIM][2-NÃO]";
+        cin>>jg;
+        if(jg==1)
+        {
+            pDama(tab);
+            vez=0;
+            return true;
+        }
+        else
+            return false;
+    }
     else if((contO>=contX && (contX==0 || contX<=4) && cont>=24)|| (ok1<=4 && ok2<=4 && cont>24))
-
-        return false;
+    {
+        cout<<"Fim de jogo!\nDeseja jogar novamente? [1-SIM]|[2-NÃO] = ";
+        cin>>jg;
+        if(jg==1)
+        {
+            pDama(tab);
+            vez=0;
+            return true;
+        }
+        else
+            return false;
+    }
     else
-
         return true;
 }
