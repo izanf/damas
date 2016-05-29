@@ -260,7 +260,7 @@ bool fimJogo(char tab[TAM][TAM])
 	    	if(tab[b][j]=='X')
 		    	ok2++;
    }
-   if((contX>contO && contO==0) || (contX<4 && contO<4 && cont>=26))
+   if((contX>=contO && contO==0) || (contX<=4 && contO<=4 && cont>=24))
         return false;
     else{
 	    if(contO>contX && contX==0)
