@@ -15,12 +15,15 @@ void mostraTab (char tab[][TAM]);
 void jogar (char tab[][TAM], int vez);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
+bool fimJogo(char tab[TAM][TAM]);
 
 int main ()
 {
     char tab[TAM][TAM];
     int i, j, vez=0;
-    bool busca=true;
+    bool busca;
+
+    busca=fimJogo(tab);
 
     pDama(tab);
     while (busca==true)
@@ -115,7 +118,7 @@ void jogar (char tab[][TAM], int vez) //recebe a casa e move a peça do jogador,
 
     while(tab[numJog-1][(int)letJog-97]!=jogada)
     {
-        cout << "Peça invalida! Selecione outra peça.";
+        cout << "Peça invalida! Selecione outra peça:";
         cin >> letJog >> numJog;
     }
 
@@ -203,7 +206,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
             }
             else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
             {
-                 if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
+                if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
                 {
                     cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
                     cin >> resultCome;
@@ -231,4 +234,31 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
     }
     else
         return true;
+}
+bool fimJogo(char tab[TAM][TAM])
+{
+    int i,j,contX=0,contO=0,cont=0;
+     
+    for(i=0; i<TAM; i++)
+    {
+        for(j=0; j<TAM; j++)
+        {
+            if(tab[i][j]=='X')
+                contX++;
+	    else
+		    if(tab[i][j]=='O')
+            		contO++;
+	    		else
+				if(tab[i][j]==' ')
+					cont++;
+        }
+    }
+    if((contX>contO && contO==0) || (contX<4 && contO<4 && cont>=26))
+        return false;
+    else{
+	    if(contO>contX && contX==0)
+   	 	return false;
+    	    else
+        	return true;
+}
 }
