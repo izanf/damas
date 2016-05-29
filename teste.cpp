@@ -18,8 +18,6 @@ int main ()
 
     pDama(tab);
 
-    busca=fimJogo(tab);
-
     do
     {
         mostraTab(tab);
@@ -28,10 +26,12 @@ int main ()
             vez=1;
         else
             vez=0;
+	
+	busca=fimJogo(tab);
+
     }
     while(busca);
-
-    return 0;
+	 return 0;
 }
 
 void pDama (char tab[][TAM]) //preenche o tabuleiro com os caracteres necessários
@@ -254,9 +254,9 @@ bool fimJogo(char tab[TAM][TAM])
             ok2++;
     }
 
-    if((contX>=contO && contO==0) || (ok1<=4 && ok2<=4 && cont>24))
+    if((contX>=contO && (contO==0 || contO<=4) && cont>=24) || (ok1<=4 && ok2<=4 && cont>=24))
         return false;
-    else if((contO>=contX && contX==0)|| (ok1<=4 && ok2<=4 && cont>24))
+    else if((contO>=contX && (contX==0 || contX<=4) && cont>=24)|| (ok1<=4 && ok2<=4 && cont>24))
 
         return false;
     else
