@@ -237,7 +237,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
 }
 bool fimJogo(char tab[TAM][TAM])
 {
-    int i,j,contX=0,contO=0,cont=0;
+    int i,j,contX=0,contO=0,cont=0,a=0,b=7,ok1=0,ok2=0;
      
     for(i=0; i<TAM; i++)
     {
@@ -253,7 +253,14 @@ bool fimJogo(char tab[TAM][TAM])
 					cont++;
         }
     }
-    if((contX>contO && contO==0) || (contX<4 && contO<4 && cont>=26))
+    for(j=0;j<TAM;j++){
+  	 if(tab[a][j]=='O')
+       		ok1++;
+ 	 else
+	    	if(tab[b][j]=='X')
+		    	ok2++;
+   }
+   if((contX>contO && contO==0) || (contX<4 && contO<4 && cont>=26))
         return false;
     else{
 	    if(contO>contX && contX==0)
