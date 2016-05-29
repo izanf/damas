@@ -170,6 +170,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                 return false;
             else
                 return true;
+	   }
             else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2)
             {
                 if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2)
@@ -253,14 +254,16 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
             else if(tab[b][j]=='X')
                 ok2++;
         }
-        if((contX>=contO && contO==0) || (ok1<=4 && ok2<=4 && cont>=24))
-            return true;
-        else
-        {
-            if(contO>contX && contX==0)
-                return true;
-            else
-                return false;
-        }
-    }
 
+        if((contX>=contO && contO==0) || (ok1<=4 && ok2<=4 && cont>24))
+	{
+            return false;
+	}
+        else if((contO>=contX && contX==0)|| (ok1<=4 && ok2<=4 && cont>24)){
+              return false;
+	}
+	else
+	{
+		return true;
+	}
+    }
