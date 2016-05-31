@@ -146,33 +146,34 @@ void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
 {
     char pecaCome;
-    int resultCome,v1,v2,v=1;
-
-    if(vez==0)
-    {
+    int resultCome;
+    if (vez==0)
         pecaCome='O';
-        v1=1;
-        v2=-1;
-    }
     else
-    {
         pecaCome='X';
-        v1=-1;
-        v2=1;
-    }
 
-    if((nNumJog-numJog<5) && (nLetJog-letJog<5) && (tab[nNumJog-1][(int)nLetJog-97]==' '))
+    if(nNumJog-numJog<5 && nLetJog-letJog<5 && tab[nNumJog-1][(int)nLetJog-97]==' ')
     {
-        if((nNumJog-numJog==1) || ((int)nLetJog-(int)letJog==1) || (nNumJog-numJog==-1) || ((int)nLetJog-(int)letJog==-1))
+        if (nNumJog-numJog==1 || (int)nLetJog-(int)letJog==1 || nNumJog-numJog==-1 || (int)nLetJog-(int)letJog==-1) // Mover 1 casa
         {
-            if((nNumJog-numJog==v1 && (int)nLetJog-(int)letJog==v) || (nNumJog-numJog==v1 || (int)nLetJog-(int)letJog==v2))
-                return false;
-            else
-                return true;
+            if (vez==0) // Mover 1 casa diagonal principal/secundaria X
+            {
+                if ((nNumJog-numJog==1 && (int)nLetJog-(int)letJog==1) || (nNumJog-numJog==1 && (int)nLetJog-(int)letJog==-1)) // Valida se a jogada é permitida
+                    return false;
+                else
+                    return true;
+            }
+            else // Mover 1 casa diagonal principal/secundaria O
+            {
+                if ((nNumJog-numJog==-1 && (int)nLetJog-(int)letJog==-1) || (nNumJog-numJog==-1 && (int)nLetJog-(int)letJog==1)) // Valida se a jogada é permitida
+                    return false;
+                else
+                    return true;
+            }
         }
-        else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2)
+        else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2) // Mover e comer 1 peça
         {
-            if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2)
+            if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2) // Comer 1 peça diagonal principal descendo
             {
                 if (tab[nNumJog-2][(int)nLetJog-98]==pecaCome)
                 {
@@ -185,7 +186,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     return false;
                 }
             }
-            else if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==-2)
+            else if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==-2) // Comer 1 peça diagonal secundaria descendo
             {
                 if (tab[nNumJog-2][(int)nLetJog-96]==pecaCome)
                 {
@@ -198,8 +199,10 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     return false;
                 }
             }
-            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2)
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==-2) // Comer 1 peça diagonal principal subindo
             {
+                cout << "nNumJog: " << nNumJog << endl;
+                cout << "(int)nLetJog-96: " << (int)nLetJog-96 << endl;
                 if (tab[nNumJog][(int)nLetJog-96]==pecaCome)
                 {
                     cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
@@ -211,7 +214,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     return false;
                 }
             }
-            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==2)
+            else if (nNumJog-numJog==-2 && (int)nLetJog-(int)letJog==2) // Comer 1 peça diagonal secundaria subindo
             {
                 if (tab[nNumJog][(int)nLetJog-98]==pecaCome)
                 {
@@ -220,6 +223,167 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                     if (resultCome==1)
                     {
                         tab[nNumJog][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+            }
+        }
+        else if (nNumJog-numJog==4 || (int)nLetJog-(int)letJog==4 || nNumJog-numJog==-4 || (int)nLetJog-(int)letJog==-4) // Mover e comer 2 peças
+        {
+            if (nNumJog-numJog==4 && (int)nLetJog-(int)letJog==4) // Comer 2 peças diagonal principal descendo
+            {
+                if ((tab[nNumJog-2][(int)nLetJog-98]==pecaCome) && (tab[nNumJog-4][(int)nLetJog-100]==pecaCome))
+                {
+                    cout << "nNumJog" << nNumJog << endl;
+                    cout << "nLetJog" << nLetJog << endl;
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-98]=' ';
+                        tab[nNumJog-4][(int)nLetJog-100]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==4 && (int)nLetJog-(int)letJog==-4) // Comer 2 peças diagonal secundaria descendo
+            {
+                if ((tab[nNumJog-2][(int)nLetJog-96]==pecaCome) && (tab[nNumJog-4][(int)nLetJog-94]==pecaCome))
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-96]=' ';
+                        tab[nNumJog-4][(int)nLetJog-94]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-4 && (int)nLetJog-(int)letJog==-4) // Comer 2 peças diagonal principal subindo
+            {
+                if ((tab[nNumJog][(int)nLetJog-96]==pecaCome) && (tab[nNumJog+2][(int)nLetJog-94]==pecaCome))
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-96]=' ';
+                        tab[nNumJog+2][(int)nLetJog-94]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-4 && (int)nLetJog-(int)letJog==4) // Comer 2 peças diagonal secundaria subindo
+            {
+                if ((tab[nNumJog][(int)nLetJog-98]==pecaCome) && (tab[nNumJog+2][(int)nLetJog-100]==pecaCome))
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                        tab[nNumJog+2][(int)nLetJog-100]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==4 && (int)nLetJog-(int)letJog==0) // Comer 2 peças coluna descendo
+            {
+                if ((tab[nNumJog-2][(int)nLetJog-98]==pecaCome) && (tab[nNumJog-4][(int)nLetJog-98]==pecaCome)) // Comer 2 peças coluna descendo, lado esquerdo
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-98]=' ';
+                        tab[nNumJog-4][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+                else if ((tab[nNumJog-2][(int)nLetJog-96]==pecaCome) && (tab[nNumJog-4][(int)nLetJog-96]==pecaCome)) // Comer 2 peças coluna descendo, lado direito
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-96]=' ';
+                        tab[nNumJog-4][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==-4 && (int)nLetJog-(int)letJog==0) // Comer 2 peças coluna subindo
+            {
+                if ((tab[nNumJog][(int)nLetJog-98]==pecaCome) && (tab[nNumJog+2][(int)nLetJog-98]==pecaCome)) // Comer 2 peças coluna subindo, lado esquerdo
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                        tab[nNumJog+2][(int)nLetJog-98]=' ';
+                    }
+                    return false;
+                }
+                else if ((tab[nNumJog][(int)nLetJog-96]==pecaCome) && (tab[nNumJog+2][(int)nLetJog-96]==pecaCome)) // Comer 2 peças coluna subindo, lado direito
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-96]=' ';
+                        tab[nNumJog+2][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==0 && (int)nLetJog-(int)letJog==4) // Comer 2 peças linha direita
+            {
+                if ((tab[nNumJog-2][(int)nLetJog-98]==pecaCome) && (tab[nNumJog-2][(int)nLetJog-100]==pecaCome)) // Comer 2 peças linha direita, lado de cima
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-98]=' ';
+                        tab[nNumJog-2][(int)nLetJog-100]=' ';
+                    }
+                    return false;
+                }
+                else if ((tab[nNumJog][(int)nLetJog-98]==pecaCome) && (tab[nNumJog][(int)nLetJog-100]==pecaCome)) // Comer 2 peças linha direita, lado de cima
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-98]=' ';
+                        tab[nNumJog][(int)nLetJog-100]=' ';
+                    }
+                    return false;
+                }
+            }
+            else if (nNumJog-numJog==0 && (int)nLetJog-(int)letJog==-4) // Comer 2 peças linha esquerda
+            {
+                if ((tab[nNumJog-2][(int)nLetJog-94]==pecaCome) && (tab[nNumJog-2][(int)nLetJog-96]==pecaCome)) // Comer 2 peças linha esquerda, lado de cima
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog-2][(int)nLetJog-94]=' ';
+                        tab[nNumJog-2][(int)nLetJog-96]=' ';
+                    }
+                    return false;
+                }
+                else if ((tab[nNumJog][(int)nLetJog-94]==pecaCome) && (tab[nNumJog][(int)nLetJog-96]==pecaCome)) // Comer 2 peças linha esquerda, lado de cima
+                {
+                    cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
+                    cin >> resultCome;
+                    if (resultCome==1)
+                    {
+                        tab[nNumJog][(int)nLetJog-94]=' ';
+                        tab[nNumJog][(int)nLetJog-96]=' ';
                     }
                     return false;
                 }
