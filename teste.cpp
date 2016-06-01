@@ -1,5 +1,7 @@
 #include <iostream>
 #define TAM 8
+#include <cstdlib>
+#include <unistd.h>
 
 using namespace std;
 
@@ -9,23 +11,43 @@ void jogar (char tab[][TAM], int vez);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
 bool fimJogo(char tab[TAM][TAM],int& vez);
+void menuJ(bool& comp);
+
+struct dadosJogador
+{
+	char nome[100];
+};
+
+struct jogadores
+{
+	dadosJogador nome[2];
+};	
+
 
 int main ()
 {
     char tab[TAM][TAM];
-    int i, j, vez=0;
-    bool busca=true;
+    int i, j, vez=0,menu;
+    bool busca=true,comp=false;
+
+    cout<<"DAMAS"<<endl;
+    sleep(3);
+    menuJ(comp);
+    system("clear");
+    
+    
 
     pDama(tab);
 
     do
     {
+	
         mostraTab(tab);
         jogar(tab,vez);
         if (vez==0)
             vez=1;
         else
-            vez=0;
+           vez=0;
 
         busca=fimJogo(tab,vez);
 
@@ -369,4 +391,22 @@ bool fimJogo(char tab[TAM][TAM],int& vez)
     }
     else
         return true;
+}
+void menuJ(bool& comp)
+{
+	int opcao;
+
+	cout<<"MENU"<<endl;
+	cout<<"(1)Jogar humano X humano\n(2)Jogar contra computador\n(3)Sair\nInsira a opção desejada:";
+	cin>>opcao;
+
+	switch(opcao)
+{
+	case 1:
+	comp=false;
+	case 2:
+	comp=true;
+	default:
+	break;
+}
 }
