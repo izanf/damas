@@ -2,16 +2,9 @@
 #define TAM 8
 #include <cstdlib>
 #include <unistd.h>
+#include <string.h>
 
 using namespace std;
-
-void pDama (char tab[][TAM]);
-void mostraTab (char tab[][TAM]);
-void jogar (char tab[][TAM], int vez);
-void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
-bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
-bool fimJogo(char tab[TAM][TAM],int& vez);
-void menuJ(bool& comp);
 
 struct dadosJogador
 {
@@ -20,27 +13,42 @@ struct dadosJogador
 
 struct jogadores
 {
-	dadosJogador nome[2];
-};	
+	dadosJogador nomes[2];
+};
 
+void pDama (char tab[][TAM]);
+void mostraTab (char tab[][TAM]);
+void jogar (char tab[][TAM], int vez);
+void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
+bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez);
+bool fimJogo(char tab[TAM][TAM],int& vez);
+void menuJ(bool& comp,bool& busca,jogadores jogs);
 
 int main ()
 {
     char tab[TAM][TAM];
-    int i, j, vez=0,menu;
-    bool busca=true,comp=false;
+    int i, j, vez=0;
+    bool busca,comp=false;
 
-    cout<<"DAMAS"<<endl;
+    jogadores jogs;
+
+    cout<<" ______   _______  __   __  _______  _______ "<<endl;
+    cout<<"|      | |   _   ||  |_|  ||   _   ||       |"<<endl;
+    cout<<"|  _    ||  |_|  ||       ||  |_|  ||  _____|"<<endl;
+    cout<<"| | |   ||       ||       ||       || |_____ "<<endl;
+    cout<<"| |_|   ||       ||       ||       ||_____  |"<<endl;
+    cout<<"|       ||   _   || ||_|| ||   _   | _____| |"<<endl;
+    cout<<"|______| |__| |__||_|   |_||__| |__||_______|"<<endl;
+
     sleep(3);
-    menuJ(comp);
+
+    menuJ(comp,busca,jogs);
+
     system("clear");
-    
-    
 
     pDama(tab);
 
-    do
-    {
+    while(busca){
 	
         mostraTab(tab);
         jogar(tab,vez);
@@ -52,7 +60,7 @@ int main ()
         busca=fimJogo(tab,vez);
 
     }
-    while(busca);
+
     return 0;
 }
 
@@ -168,11 +176,7 @@ void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
 {
     char pecaCome;
-    int resultCome, posL1, posC1, posC2, posL2,v1,v2;
-    posL1=9;
-    posC1=9;
-    posL2=9;
-    posC2=9;
+    int resultCome, posL1=9, posC1=9, posC2=9, posL2=9,v1,v2;
 
     if (vez==0)
     {
@@ -194,10 +198,9 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
                 if ((nNumJog-numJog==v1 && (int)nLetJog-(int)letJog==v1) || (nNumJog-numJog==v1 && (int)nLetJog-(int)letJog==v2)) // Valida se a jogada é permitida
                     return false;
                 else
-                    return true; 
+                    return true;
             }
-        }
-        else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2) // Mover e comer 1 peça
+              else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2) // Mover e comer 1 peça
         {
             if (nNumJog-numJog==2 && (int)nLetJog-(int)letJog==2 && tab[nNumJog-2][(int)nLetJog-98]==pecaCome) // Comer 1 peça diagonal principal descendo
             {
@@ -320,6 +323,7 @@ bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char n
             }
         }
     }
+
     if (posL1<9 && posC1<9)
     {
         cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
@@ -391,7 +395,7 @@ bool fimJogo(char tab[TAM][TAM],int& vez)
     else
         return true;
 }
-void menuJ(bool& comp)
+void menuJ(bool& comp,bool& busca,jogadores jogs)
 {
 	int opcao;
 
@@ -399,13 +403,26 @@ void menuJ(bool& comp)
 	cout<<"(1)Jogar humano X humano\n(2)Jogar contra computador\n(3)Sair\nInsira a opção desejada:";
 	cin>>opcao;
 
-	switch(opcao)
-{
-	case 1:
-	comp=false;
-	case 2:
-	comp=true;
-	default:
-	break;
-}
+	if(opcao==1)
+	{
+		for(int i=0;i<2;i++)
+		{
+		cout<<"Insira o nome do Jogador "<<i+1<<":"<<endl;
+		cin.get();
+		cin.getline(jogs.nomes[i].nome,100);
+		cout<<jogs.nomes[i].nome<<endl;
+		}
+		busca=true;
+	}
+	else if(opcao==2)
+	{
+		cout<<"Insira o nome do Jogador:";
+		cin.getline(jogs.nomes[0].nome,100);
+		strcpy(jogs.nomes[1].nome,"Computador");
+		comp=true;
+		busca=true;
+	}
+	else if(opcao==3)
+		busca=false;
+	
 }
