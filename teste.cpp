@@ -31,13 +31,13 @@ int main ()
 
     jogadores jogs;
 
-    cout<<"  ______   _______  __   __  _______  _______ "<<endl;
-    cout<<" |      | |   _   ||  |_|  ||   _   ||       |"<<endl;
-    cout<<" |  _    ||  |_|  ||       ||  |_|  ||  _____|"<<endl;
-    cout<<" | | |   ||       ||       ||       || |_____ "<<endl;
-    cout<<" | |_|   ||       ||       ||       ||_____  |"<<endl;
-    cout<<" |       ||   _   || ||_|| ||   _   | _____| |"<<endl;
-    cout<<" |______| |__| |__||_|   |_||__| |__||_______|"<<endl;
+    cout<<"     ______   _______  __   __  _______  _______ "<<endl;
+    cout<<"    |      | |   _   ||  |_|  ||   _   ||       |"<<endl;
+    cout<<"    |  _    ||  |_|  ||       ||  |_|  ||  _____|"<<endl;
+    cout<<"    | | |   ||       ||       ||       || |_____ "<<endl;
+    cout<<"    | |_|   ||       ||       ||       ||_____  |"<<endl;
+    cout<<"    |       ||   _   || ||_|| ||   _   | _____| |"<<endl;
+    cout<<"    |______| |__| |__||_|   |_||__| |__||_______|"<<endl;
 
     sleep(3);
 
@@ -52,13 +52,13 @@ int main ()
             cout<<"Insira o nome do Jogador "<<i+1<<":";
             cin.get();
             cin.getline(jogs.nomes[i].nome,100);
-            cout<<jogs.nomes[i].nome<<endl;
-        }
+         }
         busca=true;
     }
     else if(opcao==2)
     {
         cout<<"Insira o nome do Jogador:";
+	cin.get();
         cin.getline(jogs.nomes[0].nome,100);
         strcpy(jogs.nomes[1].nome,"Computador");
         comp=true;
@@ -171,7 +171,7 @@ void jogar (char tab[][TAM], int vez,jogadores j) //recebe a casa e move a peça
     cout << "Selecione a peça para mover(ex: b 4): ";
     cin >> letJog >> numJog;
 
-    while(tab[numJog-1][(int)letJog-97]!=jogada || (letJog<'a' && letJog>'h')) //não permite que o jogador jogue peça diferente da sua vez
+    while(tab[numJog-1][(int)letJog-97]!=carac || ((int)letJog<97 || (int)letJog>104)) //não permite que o jogador jogue peça diferente da sua vez
     {
         cout << "Peça invalida! Selecione outra peça:";
         cin >> letJog >> numJog;
