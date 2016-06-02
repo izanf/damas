@@ -168,34 +168,33 @@ void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca
 bool validaJogada (char tab[][TAM], int numJog, char letJog, int nNumJog, char nLetJog, int vez) //testa se a jogada é válida
 {
     char pecaCome;
-    int resultCome, posL1, posC1, posC2, posL2;
+    int resultCome, posL1, posC1, posC2, posL2,v1,v2;
     posL1=9;
     posC1=9;
     posL2=9;
     posC2=9;
 
     if (vez==0)
+    {
+	 v1=1;
+	 v2=-1;
         pecaCome='O';
+    }
     else
+    {
+	v1=-1;
+	v2=1;
         pecaCome='X';
-
+    }
     if(nNumJog-numJog<5 && nLetJog-letJog<5 && tab[nNumJog-1][(int)nLetJog-97]==' ')
     {
         if (nNumJog-numJog==1 || (int)nLetJog-(int)letJog==1 || nNumJog-numJog==-1 || (int)nLetJog-(int)letJog==-1) // Mover 1 casa
         {
-            if (vez==0) // Mover 1 casa diagonal principal/secundaria X
-            {
-                if ((nNumJog-numJog==1 && (int)nLetJog-(int)letJog==1) || (nNumJog-numJog==1 && (int)nLetJog-(int)letJog==-1)) // Valida se a jogada é permitida
+            // Mover 1 casa diagonal principal/
+                if ((nNumJog-numJog==v1 && (int)nLetJog-(int)letJog==v1) || (nNumJog-numJog==v1 && (int)nLetJog-(int)letJog==v2)) // Valida se a jogada é permitida
                     return false;
                 else
-                    return true;
-            }
-            else // Mover 1 casa diagonal principal/secundaria O
-            {
-                if ((nNumJog-numJog==-1 && (int)nLetJog-(int)letJog==-1) || (nNumJog-numJog==-1 && (int)nLetJog-(int)letJog==1)) // Valida se a jogada é permitida
-                    return false;
-                else
-                    return true;
+                    return true; 
             }
         }
         else if (nNumJog-numJog==2 || (int)nLetJog-(int)letJog==2 || nNumJog-numJog==-2 || (int)nLetJog-(int)letJog==-2) // Mover e comer 1 peça
