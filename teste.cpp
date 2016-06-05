@@ -23,9 +23,9 @@ void pDama (char tab[][TAM]);
 void mostraTab (char tab[][TAM]);
 void jogar (char tab[][TAM], int vez,jogadores j, bool compMode);
 void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC);
-bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez);
+bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, bool compMode);
 bool fimJogo(char tab[TAM][TAM],int& vez);
-void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez);
+void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, int compJog[]);
 void geraNum (int gerados[]);
 
 int main ()
@@ -119,7 +119,7 @@ void mostraTab (char tab[][TAM]) //exibe o tabuleiro
     for (i=97; i<105; i++)
     {
         if (i==97)
-        cout << "  ";
+            cout << "  ";
         cout << "  " << (char) i << " ";
     }
     cout << endl;
@@ -154,7 +154,7 @@ void mostraTab (char tab[][TAM]) //exibe o tabuleiro
 
 void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa e move a peça do jogador,caso possível
 {
-    int numJog,nNumJog,captura,contX,contO,jogada,letJog,nLetJog;
+    int numJog,nNumJog,captura,contX,contO,jogada,letJog,nLetJog,compJog[4];
     char carac,letJogI,nLetJogI;
     bool resultValida,testeComer;
 
@@ -170,7 +170,6 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
     }
     if (!compMode || vez==0)
     {
-        cout << "ENTROU!!" << endl;
         cout << "[Vez do jogador " << j.nomes[jogada].nome <<" ("<<carac<<")]"<<endl;
 
         cout << "Selecione a peça para mover(ex: b 4): ";
@@ -185,13 +184,13 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
         cout << "Digite o local para mover:";
         cin >> nLetJogI >> nNumJog; //nLetJog == letra da casa para qual vai ser mover a peça, nNumJog== linha para qual a peça vai ser movida
         nLetJog = nLetJogI-97;
-        resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez);
+        resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez, compMode);
         while(resultValida)
         {
             cout<<"Casa inválida! Selecione outra casa:";
             cin >> nLetJogI >> nNumJog;
             nLetJog=nLetJogI-97;
-            resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez);
+            resultValida = validaJogada (tab, numJog, letJog, nNumJog, nLetJog, vez, compMode);
         }
 
         numJog--;
@@ -199,12 +198,23 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
     }
     else
     {
-        compON(tab, letJog, numJog, nLetJog, nNumJog, vez);
+        cout << "MODO COMPUTADOR!! Carregando...";
+        compON(tab, numJog, letJog, nNumJog, nLetJog, vez, compJog);
+        letJog = compJog[0];
+        numJog = compJog[1];
+        nLetJog = compJog[2];
+        nNumJog = compJog[3];
+        resultValida = validaJogada(tab,numJog,letJog,nNumJog,nLetJog,vez,compMode);
+        while(resultValida)
+        {
+            compON(tab, letJog, numJog, nLetJog, nNumJog, vez, compJog);
+            letJog = compJog[0];
+            numJog = compJog[1];
+            nLetJog = compJog[2];
+            nNumJog = compJog[3];
+            resultValida = validaJogada(tab,numJog,letJog,nNumJog,nLetJog,vez, compMode);
+        }
     }
-    cout << numJog << endl;
-    cout << letJog << endl;
-    cout << nLetJog << endl;
-    cout << nNumJog << endl;
 
     troca(tab,numJog,letJog,nNumJog,nLetJog);//troca a casa depois de receber uma casa válida
 }
@@ -217,7 +227,7 @@ void troca (char tab[][TAM], int jogL, char jogC, int destL, char destC) //troca
     tab[destL][(int)destC]=temp;
 }
 
-bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez) //testa se a jogada é válida
+bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, bool compMode) //testa se a jogada é válida
 {
     char pecaCome;
     int resultCome, posL1=9, posC1=9, posC2=9, posL2=9,v1,v2;
@@ -241,10 +251,10 @@ bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLe
         {
             // Mover 1 casa diagonal principal/
             if ((nNumJog-numJog==v1 && nLetJog-letJog==v1) || (nNumJog-numJog==v1 && nLetJog-letJog==v2)) // Valida se a jogada é permitida
-               {
-                  return false;
-            cout << "ENTROU!!!" << endl;
-               }
+            {
+                return false;
+                cout << "ENTROU!!!" << endl;
+            }
             else
                 return true;
         }
@@ -371,7 +381,6 @@ bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLe
             }
         }
     }
-
     if (posL1<9 && posC1<9)
     {
         cout << "Comer peça adversaria? [1-SIM] / [2-NÃO]: ";
@@ -448,54 +457,36 @@ void menuJ(bool& comp,bool& busca,jogadores *jogs)
     int opcao;
 }
 
-void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez)
+void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, int compJog[])
 {
-    int gerados[2], result=true;
-    cout << "COMPUTER MODE!! Aguarde";
-    while (result)
+    int gerados[2];
+    geraNum(gerados);
+    letJog = gerados[0];
+    numJog = gerados[1];
+    while(tab[numJog][(int)letJog]!='O') //não permite que o computador jogue peça diferente da sua vez
     {
-        cout << "..";
         geraNum(gerados);
         letJog = gerados[0];
         numJog = gerados[1];
-        while(tab[numJog][(int)letJog]!='O') //não permite que o computador jogue peça diferente da sua vez
-        {
-            geraNum(gerados);
-            letJog = gerados[0];
-            numJog = gerados[1];
-        }
-        if (tab[numJog-1][(int)letJog-1]=='X') // Comer 1 peça diagonal principal subindo
-        {
-            nNumJog = numJog-2;
-            nLetJog = letJog-2;
-        }
-        else if (tab[numJog-1][(int)letJog+1]=='X') // Comer 1 peça diagonal secundaria subindo
-        {
-            nNumJog = numJog-2;
-            nLetJog = letJog+2;
-        }
-        else if (tab[numJog-1][(int)letJog-1]==' ') // Comer 1 peça diagonal principal subindo
-        {
-            nNumJog = numJog-1;
-            nLetJog = letJog-1;
-        }
-        else if (tab[numJog-1][(int)letJog+1]==' ') // Comer 1 peça diagonal secundaria subindo
-        {
-            nNumJog = numJog-1;
-            nLetJog = letJog+1;
-        }
-        else
-        {
-            nNumJog = 5;
-            nLetJog = 5;
-        }
-        if (nNumJog<5 && nLetJog<5)
-            result = validaJogada(tab,numJog,letJog,nNumJog,nLetJog,vez);
     }
-    cout << numJog << endl;
-    cout << letJog << endl;
-    cout << nNumJog << endl;
-    cout << nLetJog << endl;
+    if (tab[numJog-1][(int)letJog-1]==' ') // Comer 1 peça diagonal principal subindo
+    {
+        nNumJog = numJog-1;
+        nLetJog = letJog-1;
+    }
+    else if (tab[numJog-1][(int)letJog+1]==' ') // Comer 1 peça diagonal secundaria subindo
+    {
+        nNumJog = numJog-1;
+        nLetJog = letJog+1;
+    }
+    else {
+        nNumJog = 5;
+        nLetJog = 5;
+    }
+    compJog[0] = letJog;
+    compJog[1] = numJog;
+    compJog[2] = nLetJog;
+    compJog[3] = nNumJog;
 }
 
 void geraNum (int gerados[])
