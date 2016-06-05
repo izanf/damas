@@ -1,9 +1,11 @@
+//Jogo funcionando para linux
+
 #include <iostream>
 #define TAM 8
 #include <cstdlib>
 #include <unistd.h>
 #include <string.h>
-#include <windows.h>
+//#include <windows.h>
 #include <stdlib.h>
 #include <ctime>
 
@@ -44,7 +46,7 @@ int main ()
     cout<<"    |       ||   _   || ||_|| ||   _   | _____| |"<<endl;
     cout<<"    |______| |__| |__||_|   |_||__| |__||_______|"<<endl;
 
-    Sleep(3);
+    sleep(3);
 
     cout<<"MENU"<<endl;
     cout<<"(1)Jogar humano X humano\n(2)Jogar contra computador\n(3)Sair\nInsira a opção desejada:";
@@ -72,21 +74,21 @@ int main ()
     else if(opcao==3)
         busca=false;
 
-    system("cls");
+    system("clear");
 
     pDama(tab);
 
-    while(busca)
+    while(busca) //exibe e permite jogadas enquanto possível
     {
 
         mostraTab(tab);
         jogar(tab,vez,jogs,compMode);
-        if (vez==0)
+        if (vez==0) //troca o jogador
             vez=1;
         else
             vez=0;
 
-        busca=fimJogo(tab,vez);
+        busca=fimJogo(tab,vez); //chama a função que determina o fim do jogo
     }
     return 0;
 }
@@ -160,7 +162,7 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
 
     if(vez==0)
     {
-        carac='X';
+        carac='X';//identifica a peça do jogador da vez
         jogada=0;
     }
     else
@@ -168,13 +170,13 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
         carac='O';
         jogada=1;
     }
-    if (!compMode || vez==0)
+    if (!compMode || vez==0)//mostra a opção de jogar e executa o resto do código caso não seja a vez do computador
     {
-        cout << "[Vez do jogador " << j.nomes[jogada].nome <<" ("<<carac<<")]"<<endl;
+        cout << "[Vez do jogador " << j.nomes[jogada].nome <<" ("<<carac<<")]"<<endl; //exibe o nome dos jogadores e a peça dele
 
         cout << "Selecione a peça para mover(ex: b 4): ";
         cin >> letJogI >> numJog;
-        while(tab[numJog-1][(int)letJogI-97]!=carac || ((int)letJogI<97 || (int)letJogI>104)) //não permite que o jogador jogue peça diferente da sua vez
+        while(tab[numJog-1][(int)letJogI-97]!=carac) //não permite que o jogador jogue peça diferente da sua vez
         {
             cout << "Peça invalida! Selecione outra peça:";
             cin >> letJogI >> numJog;
@@ -199,12 +201,12 @@ void jogar (char tab[][TAM], int vez,jogadores j, bool compMode) //recebe a casa
     else
     {
         cout << "MODO COMPUTADOR!! Carregando...";
-        compON(tab, numJog, letJog, nNumJog, nLetJog, vez, compJog);
+        compON(tab, numJog, letJog, nNumJog, nLetJog, vez, compJog);//o vetor compJog distribui os valores para a letra e num da casa que vai ser jogada pelo mesmo
         letJog = compJog[0];
         numJog = compJog[1];
         nLetJog = compJog[2];
         nNumJog = compJog[3];
-        resultValida = validaJogada(tab,numJog,letJog,nNumJog,nLetJog,vez,compMode);
+        resultValida = validaJogada(tab,numJog,letJog,nNumJog,nLetJog,vez,compMode); //testa as casas gerada
         while(resultValida)
         {
             compON(tab, letJog, numJog, nLetJog, nNumJog, vez, compJog);
@@ -251,10 +253,7 @@ bool validaJogada (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLe
         {
             // Mover 1 casa diagonal principal/
             if ((nNumJog-numJog==v1 && nLetJog-letJog==v1) || (nNumJog-numJog==v1 && nLetJog-letJog==v2)) // Valida se a jogada é permitida
-            {
                 return false;
-                cout << "ENTROU!!!" << endl;
-            }
             else
                 return true;
         }
@@ -422,12 +421,15 @@ bool fimJogo(char tab[TAM][TAM],int& vez)
         else if(tab[b][j]=='X')
             ok2++;
     }
-
+    /*
+    Nas linhas a seguir, é verifica se a quantidade de peças é pouca,ou se existe só uma peça no tabuleiro
+    ou ainda se existe só peças nas ultimas linhas do tabuleiro e se são do adversário
+    */
     if((contX>=contO && (contO==0 || contO<=4) && cont>=24) || (ok1<=4 && ok2<=4 && cont>=24))
     {
         cout<<"Fim de jogo!\nDeseja jogar novamente?[1-SIM][2-NÃO]";
         cin>>jg;
-        if(jg==1)
+        if(jg==1)//caso queira jogar,o tabuleiro é reiniciado e o jogador 'X' começa jogando
         {
             pDama(tab);
             vez=0;
@@ -452,12 +454,8 @@ bool fimJogo(char tab[TAM][TAM],int& vez)
     else
         return true;
 }
-void menuJ(bool& comp,bool& busca,jogadores *jogs)
-{
-    int opcao;
-}
 
-void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, int compJog[])
+void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, int vez, int compJog[])//gera jogada do computador
 {
     int gerados[2];
     geraNum(gerados);
@@ -479,7 +477,8 @@ void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, 
         nNumJog = numJog-1;
         nLetJog = letJog+1;
     }
-    else {
+    else
+    {
         nNumJog = 5;
         nLetJog = 5;
     }
@@ -489,7 +488,7 @@ void compON (char tab[][TAM], int numJog, int letJog, int nNumJog, int nLetJog, 
     compJog[3] = nNumJog;
 }
 
-void geraNum (int gerados[])
+void geraNum (int gerados[])//gera numeros para serem usados no tabuleiro pelo computador
 {
     int i;
     srand(time(0));
